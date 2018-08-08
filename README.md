@@ -8,6 +8,6 @@ All the raw sequencing data, snAP-seq sites and peaks have been deposited in the
 
 ## Code
 
-- [Synthetic oligonucleotide experiments](oligo.md): exploring synthetic and 5-hmU N-oligo libraries.
-- [snAP-seq in *Leishmania major*](leishmania.md): analysis after SMUG1 and UNG treatments.
+- [Synthetic oligonucleotide experiments](oligo.md): exploring synthetic and 5-hmU N-oligo libraries
+- [snAP-seq in *Leishmania major*](leishmania.md): mapping AP sites after SMUG1 and UNG treatments
 - [snAP-seq in *HeLa* cell line](hela.md)

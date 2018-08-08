@@ -16,7 +16,7 @@
   - [ggseqlogo v0.1](https://cran.rstudio.com/web/packages/ggseqlogo/index.html)
   - [Biostrings v2.42.1](https://bioconductor.org/packages/release/bioc/html/Biostrings.html)
   - [scales v0.4.1](https://cran.r-project.org/web/packages/scales/index.html)
-
+  - [data.table v1.10.4](https://cran.r-project.org/web/packages/data.table/index.html)
 
 
 
@@ -25,7 +25,10 @@
 ```bash
 cd ~/fastq # directory containing the fastq sequencing files
 mkdir ../fastqc
-fastqc --noextract -q -o ../fastqc *.fastq.gz
+for fq in *.fastq.gz
+do
+  fastqc --noextract -q -o ../fastqc $fq
+done
 ```
 
 
@@ -521,7 +524,6 @@ ofile.close()
 ```
 
 
-
 ### Sequence logos
 
 ```r
@@ -588,4 +590,96 @@ theme_logo() +
 theme(axis.line.y = element_line(color="black"))
 
 ggsave('~/figures/Lib140_prob.png', width = 14)
+```
+
+
+### Comparing counts
+
+```r
+library(data.table)
+
+# Enlarge the view width when printing tables
+options(width = 300)
+
+# Load libraries
+lib138 <- fread("~/tables/Lib138.txt")
+colnames(lib138)[1] <- "pos"
+
+lib139 <- fread("~/tables/Lib139.txt")
+colnames(lib139)[1] <- "pos"
+
+lib140 <- fread("~/tables/Lib140.txt")
+colnames(lib140)[1] <- "pos"
+
+
+#####################
+# Lib138 vs. Lib140 #
+#####################
+lib138_lib140 <- cbind(lib138[, .(G, other=A+C+T)], lib140[12:21, .(G, other=A+C+T)])
+colnames(lib138_lib140) <- c("G.lib138", "other.lib138", "G.lib140", "other.lib140")
+
+lib138_lib140[, odds := (G.lib138/other.lib138)/(G.lib140/other.lib140)]
+lib138_lib140[, pval_f := fisher.test(matrix(c(G.lib138, other.lib138, G.lib140, other.lib140), nrow = 2))$p.value, by = 1:nrow(lib138_lib140)]
+lib138_lib140[, pval_q := chisq.test(matrix(c(G.lib138, other.lib138, G.lib140, other.lib140), nrow = 2))$p.value, by = 1:nrow(lib138_lib140)]
+
+lib138_lib140
+#    G.lib138 other.lib138 G.lib140 other.lib140      odds       pval_f       pval_q
+# 1:    86907       130122    86947       165510 1.2713750 0.000000e+00 0.000000e+00
+# 2:    73677       143352    87948       164509 0.9613729 1.669730e-10 1.684780e-10
+# 3:    77760       139269    88124       164333 1.0411957 4.327105e-11 4.345580e-11
+# 4:    75973       141056    87471       164986 1.0158994 1.030426e-02 1.033280e-02
+# 5:    76332       140697    88432       164025 1.0062883 3.071588e-01 3.081797e-01
+# 6:    77800       139229    88390       164067 1.0372131 2.396764e-09 2.401747e-09
+# 7:    78209       138820    88238       164219 1.0485097 9.872242e-15 9.810232e-15
+# 8:    76809       140220    87739       164718 1.0283727 5.152470e-06 5.153196e-06
+# 9:    78434       138595    88913       163544 1.0409411 5.233433e-11 5.212921e-11
+#10:    77747       139282    88130       164327 1.0408156 6.522288e-11 6.487237e-11
+
+
+#####################
+# Lib139 vs. Lib140 #
+#####################
+lib139_lib140 <- cbind(lib139[12:21, .(G, other=A+C+T)], lib140[12:21, .(G, other=A+C+T)])
+colnames(lib139_lib140) <- c("G.lib139", "other.lib139", "G.lib140", "other.lib140")
+
+lib139_lib140[, odds := (G.lib139/other.lib139)/(G.lib140/other.lib140)]
+lib139_lib140[, pval_f := fisher.test(matrix(c(G.lib139, other.lib139, G.lib140, other.lib140), nrow = 2))$p.value, by = 1:nrow(lib139_lib140)]
+lib139_lib140[, pval_q := chisq.test(matrix(c(G.lib139, other.lib139, G.lib140, other.lib140), nrow = 2))$p.value, by = 1:nrow(lib139_lib140)]
+
+lib139_lib140
+#    G.lib139 other.lib139 G.lib140 other.lib140      odds       pval_f       pval_q
+# 1:   100398       176004    86947       165510 1.0858558 2.145023e-46 2.290044e-46
+# 2:    94743       181659    87948       164509 0.9755598 1.931301e-05 1.940241e-05
+# 3:    95807       180595    88124       164333 0.9892865 6.270575e-02 6.279071e-02
+# 4:    95541       180861    87471       164986 0.9963866 5.319651e-01 5.335171e-01
+# 5:    96217       180185    88432       164025 0.9904528 9.684574e-02 9.725182e-02
+# 6:    96132       180270    88390       164067 0.9898346 7.715034e-02 7.736764e-02
+# 7:    96226       180176    88238       164219 0.9939470 2.944422e-01 2.945425e-01
+# 8:    95703       180699    87739       164718 0.9943017 3.240534e-01 3.245475e-01
+# 9:    97080       179322    88913       163544 0.9957849 4.640386e-01 4.655292e-01
+#10:    96517       179885    88130       164327 1.0004468 9.401538e-01 9.406367e-01
+
+
+#####################
+# Lib138 vs. Lib139 #
+#####################
+lib138_lib139 <- cbind(lib138[, .(G, other=A+C+T)], lib139[12:21, .(G, other=A+C+T)])
+colnames(lib138_lib139) <- c("G.lib138", "other.lib138", "G.lib139", "other.lib139")
+
+lib138_lib139[, odds := (G.lib138/other.lib138)/(G.lib139/other.lib139)]
+lib138_lib139[, pval_f := fisher.test(matrix(c(G.lib138, other.lib138, G.lib139, other.lib139), nrow = 2))$p.value, by = 1:nrow(lib138_lib139)]
+lib138_lib139[, pval_q := chisq.test(matrix(c(G.lib138, other.lib138, G.lib139, other.lib139), nrow = 2))$p.value, by = 1:nrow(lib138_lib139)]
+
+lib138_lib139
+#    G.lib138 other.lib138 G.lib139 other.lib139      odds        pval_f        pval_q
+# 1:    86907       130122   100398       176004 1.1708507 3.209171e-157 2.094121e-157
+# 2:    73677       143352    94743       181659 0.9854576  1.554213e-02  1.560027e-02
+# 3:    77760       139269    95807       180595 1.0524713  1.639867e-17  1.609480e-17
+# 4:    75973       141056    95541       180861 1.0195836  1.285855e-03  1.289395e-03
+# 5:    76332       140697    96217       180185 1.0159881  8.358264e-03  8.411812e-03
+# 6:    77800       139229    96132       180270 1.0478651  6.580868e-15  6.633601e-15
+# 7:    78209       138820    96226       180176 1.0548949  5.006841e-19  4.984608e-19
+# 8:    76809       140220    95703       180699 1.0342662  2.111794e-08  2.118601e-08
+# 9:    78434       138595    97080       179322 1.0453473  1.312203e-13  1.311646e-13
+#10:    77747       139282    96517       179885 1.0403507  4.259812e-11  4.292397e-11
 ```

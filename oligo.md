@@ -195,7 +195,7 @@ from collections import Counter, defaultdict
 ##########
 
 # Define variables
-d = "fastq_trimmed"
+d = "~/fastq_trimmed"
 files = os.listdir(d)
 lib = "Lib138"
 
@@ -398,7 +398,7 @@ ofile.close()
 ##########
 
 # Define variables
-d = "fastq_trimmed"
+d = "~/fastq_trimmed"
 files = os.listdir(d)
 lib = "Lib140"
 

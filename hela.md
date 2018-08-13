@@ -1,4 +1,24 @@
 
+## Table of contents
+
+- [Software requirements](#software-requirements)
+- [Libraries](#libraries)
+- [Quality check](#quality-check)
+- [Trim adapters and filter bases based on quality](#trim-adapters-and-filter-bases-based-on-quality)
+- [Discard reads containing protecting group sequence](#discard-reads-containing-protecting-group-sequence)
+- [Alignment](#alignment)
+- [Spike-ins read count analysis](#spike-ins-read-count-analysis)
+- [Filtering genomic libraries](#filtering-genomic-libraries)
+- [Create tdf files](#create-tdf-files)
+- [Insert size plots](#insert-size-plots)
+- [Peak calling](#peak-calling)
+- [Consensus peaks](#consensus-peaks)
+- [Genomic Association Tester (GAT) analysis](#genomic-association-tester-gat-analysis)
+- [Base composition tables](#base-composition-tables)
+- [Calling AP sites](#calling-ap-sites)
+
+
+
 ## Software requirements
 
 - [FastQC v0.11.3](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
@@ -28,7 +48,7 @@
 APE1 k.d. batch:
 
 Library | Biological replicate
---------|---------------------
+:------:|:-------------------:
 snAP-seq | rep1
 snAP-seq | rep2
 snAP-seq | rep3
@@ -41,7 +61,7 @@ Y-input | rep4
 WT batch:
 
 Library | Biological replicate
---------|---------------------
+:------:|:-------------------:
 snAP-seq | rep1
 snAP-seq | rep2
 snAP-seq | rep3

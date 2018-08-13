@@ -1,4 +1,29 @@
 
+## Table of contents
+
+- [Software requirements](#software-requirements)
+- [Libraries](#libraries)
+- [Quality check](#quality-check)
+- [Trim adapters and filter bases based on quality](#trim-adapters-and-filter-bases-based-on-quality)
+- [Discard reads containing protecting group sequence](#discard-reads-containing-protecting-group-sequence)
+- [Alignment](#alignment)
+- [Spike-ins read count analysis](#spike-ins-read-count-analysis)
+- [Filtering genomic libraries](#filtering-genomic-libraries)
+- [Create tdf files](#create-tdf-files)
+- [Insert size plots](#insert-size-plots)
+- [Calling AP sites](#calling-ap-sites)
+- [Comparison of SMUG1-snAP-seq sites with peaks obtained in Kawasaki et al., Genome biology, 2017](#comparison-of-smug1-snap-seq-sites-with-peaks-obtained-in-kawasaki-et-al-genome-biology-2017)
+- [Merge technical replicates and calculate coverage](#merge-technical-replicates-and-calculate-coverage)
+- [Base composition profiles](#base-composition-profiles)
+- [Coverage profiles centered around the sites](#coverage-profiles-centered-around-the-sites)
+- [Sequence logos](#sequence-logos)
+- [Exploring TG enrichment using frequencies of dinucleotides counts, motifs and tests](#exploring-tg-enrichment-using-frequencies-of-dinucleotides-counts-motifs-and-tests)
+- [Peak calling](#peak-calling)
+- [Consensus peaks](#consensus-peaks)
+- [Overlap with 5hmU and baseJ peaks](#overlap-with-5hmu-and-basej-peaks)
+
+
+
 ## Software requirements
 
 - [FastQC v0.11.3](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
@@ -39,7 +64,7 @@
 SMUG1 batch:
 
 Library | Biological replicate
---------|---------------------
+:------:|:-------------------:
 SMUG1-snAP-seq | rep1
 SMUG1-snAP-seq | rep2
 snAP-seq | rep1
@@ -50,7 +75,7 @@ Y-input | rep2
 UNG batch:
 
 Library | Biological replicate
---------|---------------------
+:------:|:-------------------:
 UNG-snAP-seq | rep1
 UNG-snAP-seq | rep2
 Y-input | rep1

@@ -1,4 +1,16 @@
 
+## Table of contents
+
+- [Software requirements](#software-requirements)
+- [Quality check](#quality-check)
+- [Trim adapters and filter bases based on quality](#trim-adapters-and-filter-bases-based-on-quality)
+- [Alignment](#alignment)
+- [Distribution of reference sequences](#distribution-of-reference-sequences)
+- [Patterns of alignment start sites](#patterns-of-alignment-start-sites)
+- [Synthetic 5-hmU N-oligo libraries](#synthetic-5-hmu-n-oligo-libraries)
+
+
+
 ## Software requirements
 
 - [FastQC v0.11.3](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)

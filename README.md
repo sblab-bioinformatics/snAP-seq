@@ -3,7 +3,7 @@ This repository contains data access and computational analyses for the methods 
 
 ## Data
 
-All the raw sequencing data, snAP-seq sites and peaks have been deposited in the ArrayExpress database at EMBL-EBI under accession number [E-MTAB-XXXX](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-XXXX).
+All the raw sequencing data, snAP-seq sites and peaks have been deposited in the ArrayExpress database at EMBL-EBI under accession number [E-MTAB-7152](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-7152) (*under reviewer access only*).
 
 
 ## Code

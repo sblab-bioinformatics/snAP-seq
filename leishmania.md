@@ -59,25 +59,20 @@
 
 ## Libraries
 
-SMUG1 batch:
+ArrayExpress E-MTAB-7152 naming:
 
-Library | Biological replicate
-:------:|:-------------------:
-SMUG1-snAP-seq | rep1
-SMUG1-snAP-seq | rep2
-snAP-seq | rep1
-snAP-seq | rep2
-Y-input | rep1
-Y-input | rep2
-
-UNG batch:
-
-Library | Biological replicate
-:------:|:-------------------:
-UNG-snAP-seq | rep1
-UNG-snAP-seq | rep2
-Y-input | rep1
-Y-input | rep2
+Library | Biological replicate | Sequencing type
+:------:|:--------------------:|:--------------:
+Lmajor_SMUG1_snAP1 | rep1 | paired-end | paired-end
+Lmajor_SMUG1_snAP2 | rep2 | paired-end
+Lmajor_snAP1 | rep1 | paired-end
+Lmajor_snAP2 | rep2 | paired-end
+Lmajor_input1 | rep1 | paired-end
+Lmajor_input2 | rep2 | paired-end
+Lmajor_UNG_snAP1 | rep1 | paired-end
+Lmajor_UNG_snAP2 | rep2 | paired-end
+Lmajor_UNG_input1 | rep1 | paired-end
+Lmajor_UNG_input2 | rep2 | paired-end
 
 
 
@@ -137,7 +132,7 @@ wget ftp://ftp.sanger.ac.uk/pub/project/pathogens/Leishmania/major/current_gff3/
 wget ftp://ftp.sanger.ac.uk/pub/project/pathogens/Leishmania/major/current_gff3/Lmajor.gff3.gz
 gzip -d Lmajor.genome.fasta.gz
 
-cat Lmajor.genome.fasta spikeins.fa > Lmajor.genome_spikeins.fasta
+cat Lmajor.genome.fasta spikeins.fa > Lmajor.genome_spikeins.fasta # see oligo.md for the contents of spikeins.fa
 
 bwa index Lmajor.genome_spikeins.fasta
 samtools faidx Lmajor.genome_spikeins.fasta
@@ -171,7 +166,7 @@ cd ~/bam
 
 mkdir ../flagstat
 
-listOfIds="..." # add here the list of ids for the libraries you want to merge
+listOfIds="..." # add here the list of ids for the libraries you want to merge, if lanes are already merged then skip the samtools merge step below
 
 for id in listOfIds
 do
@@ -333,6 +328,22 @@ done
 
 
 ## Calling AP sites
+
+ArrayExpress E-MTAB-7152 naming:
+
+Library | id
+:------:|:--:
+Lmajor_SMUG1_snAP1 | Lib96
+Lmajor_SMUG1_snAP2 | Lib100
+Lmajor_snAP1 | Lib97
+Lmajor_snAP2 | Lib101
+Lmajor_input1 | Lib99b
+Lmajor_input2 | Lib103
+Lmajor_UNG_snAP1 | Lib130
+Lmajor_UNG_snAP2 | Lib131
+Lmajor_UNG_input1 | Lib132
+Lmajor_UNG_input2 | Lib133
+
 
 ### R1.fwd
 
@@ -517,9 +528,9 @@ coord_cartesian(xlim = c(-10, 10))
 ggsave('~/figures/Lib97_Leish_AP.Lib101_Leish_AP_2.clean.R1.fwd.cigar.png', width = 12, height = 12, units = 'cm')
 
 
-############################
-# UNG-snAP-seq vs. Y-input #
-############################
+###########################################
+# Lib130 and Lib131 vs. Lib132 and Lib133 #
+###########################################
 
 # Load data
 data <- fread("tableCat.py -i ~/ap/*Lib13{0..3}*fwd*cov -r .clean.R1.fwd.cigar.cov")
@@ -620,9 +631,9 @@ library(ggplot2)
 options(width = 250)
 
 
-##############################
-# SMUG1-snAP-seq vs. Y-input #
-##############################
+##########################################
+# Lib96 and Lib100 vs. Lib99b and Lib103 #
+##########################################
 
 # Load data
 data <- fread("tableCat.py -i ~/ap/*Lib{96,100,99b,103}*rev*.cov -r .clean.R1.rev.cigar.cov")
@@ -699,9 +710,9 @@ coord_cartesian(xlim = c(-10, 10))
 ggsave('~/figures/Lib96_Leish_SMUG1-AP.Lib100_Leish_SMUG1-AP_2.clean.R1.rev.cigar.png', width = 12, height = 12, units = 'cm')
 
 
-########################
-# snAP-seq vs. Y-input #
-########################
+##########################################
+# Lib97 and Lib101 vs. Lib99b and Lib103 #
+##########################################
 
 # Load data
 data <- fread("tableCat.py -i ~/ap/*Lib{97,101,99b,103}*rev*.cov -r .clean.R1.rev.cigar.cov")
@@ -773,9 +784,9 @@ coord_cartesian(xlim = c(-10, 10))
 ggsave('~/figures/Lib97_Leish_AP.Lib101_Leish_AP_2.clean.R1.rev.cigar.png', width = 12, height = 12, units = 'cm')
 
 
-############################
-# UNG-snAP-seq vs. Y-input #
-############################
+###########################################
+# Lib130 and Lib131 vs. Lib132 and Lib133 #
+###########################################
 
 # Load data
 data <- fread("tableCat.py -i ~/ap/*Lib13{0..3}*rev*.cov -r .clean.R1.rev.cigar.cov")
@@ -910,17 +921,17 @@ cd ~/bam
 mkdir ../bam_merge
 mkdir ../bw_merge
 
-##################
-# SMUG1-snAP-seq #
-##################
+#####################
+# Lmajor_SMUG1_snAP #
+#####################
 
 # fwd
-samtools merge -@ 20 ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.fwd.cigar.bam Leish_SMUG1-AP_S4.clean.R1.fwd.cigar.bam LLeish_SMUG1-AP_2_S7.clean.R1.fwd.cigar.bam && \
+samtools merge -@ 20 ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.fwd.cigar.bam Leish_SMUG1-AP_S4.clean.R1.fwd.cigar.bam Leish_SMUG1-AP_2_S7.clean.R1.fwd.cigar.bam && \
 samtools index ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.fwd.cigar.bam && \
 bamCoverage -b ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.fwd.cigar.bam -o ../bw_merge/Leish_SMUG1-snAP-seq.clean.R1.fwd.cigar.bw -of bigwig --binSize 1 -p 20 --normalizeUsingRPKM
 
 # rev
-samtools merge -@ 20 ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.rev.cigar.bam Leish_SMUG1-AP_S4.clean.R1.rev.cigar.bam LLeish_SMUG1-AP_2_S7.clean.R1.rev.cigar.bam && \
+samtools merge -@ 20 ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.rev.cigar.bam Leish_SMUG1-AP_S4.clean.R1.rev.cigar.bam Leish_SMUG1-AP_2_S7.clean.R1.rev.cigar.bam && \
 samtools index ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.rev.cigar.bam && \
 bamCoverage -b ../bam_merge/Leish_SMUG1-snAP-seq.clean.R1.rev.cigar.bam -o ../bw_merge/Leish_SMUG1-snAP-seq.clean.R1.rev.cigar.bw -of bigwig --binSize 1 -p 20 --normalizeUsingRPKM
 ```
@@ -1004,7 +1015,6 @@ for f in fasta_files:
         otable.write("\t0")
     otable.write("\n")
   otable.close()
-
 ```
 
 

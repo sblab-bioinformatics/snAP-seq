@@ -61,18 +61,18 @@
 
 ArrayExpress E-MTAB-7152 naming:
 
-Library | Biological replicate | Sequencing type
-:------:|:--------------------:|:--------------:
-Lmajor_SMUG1_snAP1 | rep1 | paired-end | paired-end
-Lmajor_SMUG1_snAP2 | rep2 | paired-end
-Lmajor_snAP1 | rep1 | paired-end
-Lmajor_snAP2 | rep2 | paired-end
-Lmajor_input1 | rep1 | paired-end
-Lmajor_input2 | rep2 | paired-end
-Lmajor_UNG_snAP1 | rep1 | paired-end
-Lmajor_UNG_snAP2 | rep2 | paired-end
-Lmajor_UNG_input1 | rep1 | paired-end
-Lmajor_UNG_input2 | rep2 | paired-end
+Library | Biological replicate | Sequencing type| script id
+:------:|:--------------------:|:--------------:|:--------:
+Lmajor_SMUG1_snAP1 | rep1 | paired-end | Lib96
+Lmajor_SMUG1_snAP2 | rep2 | paired-end | Lib100
+Lmajor_snAP1 | rep1 | paired-end | Lib97
+Lmajor_snAP2 | rep2 | paired-end | Lib101
+Lmajor_input1 | rep1 | paired-end | Lib99b
+Lmajor_input2 | rep2 | paired-end | Lib103
+Lmajor_UNG_snAP1 | rep1 | paired-end | Lib130
+Lmajor_UNG_snAP2 | rep2 | paired-end | Lib131
+Lmajor_UNG_input1 | rep1 | paired-end | Lib132
+Lmajor_UNG_input2 | rep2 | paired-end | Lib133
 
 
 
@@ -328,22 +328,6 @@ done
 
 
 ## Calling AP sites
-
-ArrayExpress E-MTAB-7152 naming:
-
-Library | id
-:------:|:--:
-Lmajor_SMUG1_snAP1 | Lib96
-Lmajor_SMUG1_snAP2 | Lib100
-Lmajor_snAP1 | Lib97
-Lmajor_snAP2 | Lib101
-Lmajor_input1 | Lib99b
-Lmajor_input2 | Lib103
-Lmajor_UNG_snAP1 | Lib130
-Lmajor_UNG_snAP2 | Lib131
-Lmajor_UNG_input1 | Lib132
-Lmajor_UNG_input2 | Lib133
-
 
 ### R1.fwd
 

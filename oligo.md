@@ -51,15 +51,14 @@ done
 cd ~/fastq
 mkdir ../fastq_trimmed
 
-# Single-end (Lib16 and Lib26)
+# Single-end (Synthetic_snAP and Synthetic_input_untreated)
 for fq in *.fastq.gz
 do
   bname=${fq%.fastq.gz}
   cutadapt -a AGATCGGAAGAGC -m 15 -q 20 -o ../fastq_trimmed/$fq $fq > ../fastq_trimmed/$bname.txt
 done
 
-
-# Paired-end (Lib22 and Lib138-140)
+# Paired-end (Synthetic_input_treated)
 for fq1 in *R1*.fastq.gz
 do
   fq2=${fq1/_R1_/_R2_}
@@ -104,7 +103,7 @@ bwa index spikeins.fa
 cd ~/fastq_trimmed
 mkdir ../bam
 
-# Single-end (Lib16 and Lib26)
+# Single-end (Synthetic_snAP and Synthetic_input_untreated)
 for fq in *.fastq.gz
 do
   bname=${fq%.fastq.gz}
@@ -112,8 +111,7 @@ do
   samtools index ../bam/$bname.bam
 done
 
-
-# Paired-end (Lib22)
+# Paired-end (Synthetic_input_treated)
 for fq1 in *R1*.fastq.gz
 do
   fq2=${fq1/_R1_/_R2_}
@@ -130,7 +128,7 @@ done
 ```bash
 cd ~/bam
 
-# Single-end (Lib16 and Lib26)
+# Single-end (Synthetic_snAP and Synthetic_input_untreated)
 for bam in *.bam
 do
   bname=${bam%.bam}
@@ -138,8 +136,7 @@ do
   samtools view $bam -F 256 -F 4 -f 16 | cut -f3 | sort | uniq -c > ${bname}_rev.txt
 done
 
-
-# Paired-end (Lib22)
+# Paired-end (Synthetic_input_treated)
 for bam in *.bam
 do
   bname=${bam%.bam}
@@ -157,29 +154,28 @@ done
 ```bash
 cd ~/bam
 
-# Single-end (Lib16 and Lib26)
+# Single-end (Synthetic_snAP and Synthetic_input_untreated)
 for bam in *.bam
 do
   bname=${bam%.bam}
-   for ref in AP1 AP2 fC1 fC2 fU1 fU2 GCAT1 GCAT2
-   do
-      samtools view $bam -F 256 -F 4 -F 16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk ' { t = $1; $1 = $2; $2 = t; print; } ' >  ${bname}_${ref}_fwd.txt
-      samtools view $bam -F 256 -F 4 -f 16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk ' { t = $1; $1 = $2; $2 = t; print; } ' >  ${bname}_${ref}_rev.txt
-   done
+  for ref in AP1 AP2 fC1 fC2 fU1 fU2 GCAT1 GCAT2
+  do
+    samtools view $bam -F 256 -F 4 -F 16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk ' { t = $1; $1 = $2; $2 = t; print; } ' >  ${bname}_${ref}_fwd.txt
+     samtools view $bam -F 256 -F 4 -f 16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk ' { t = $1; $1 = $2; $2 = t; print; } ' >  ${bname}_${ref}_rev.txt
+  done
 done
 
-
-# Paired-end (Lib22)
+# Paired-end (Synthetic_input_treated)
 for bam in *.bam
 do
   for ref in AP1 AP2 fC1 fC2 fU1 fU2 GCAT1 GCAT2
   do
     bname=${bam%.bam}
-    samtools view $bam -F260 -f64 -f32 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R1_fwd_${ref}.txt &
-    samtools view $bam -F260 -f64 -f16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R1_rev_${ref}.txt &
-    samtools view $bam -F260 -f128 -f32 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R2_fwd_${ref}.txt &
-    samtools view $bam -F260 -f128 -f16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R2_rev_${ref}.txt &
-    done
+    samtools view $bam -F260 -f64 -f32 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R1_fwd_${ref}.txt
+    samtools view $bam -F260 -f64 -f16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R1_rev_${ref}.txt
+    samtools view $bam -F260 -f128 -f32 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R2_fwd_${ref}.txt
+    samtools view $bam -F260 -f128 -f16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ${bname}_R2_rev_${ref}.txt
+  done
 done
 ```
 
@@ -195,6 +191,12 @@ fwd:   GTCTACCTGAACGCCGCTGTNNNNNNNNNNUNNNNNNNNNNGTAGTAGTCGACTAGACGTCCAACCAACGGAA
                                                                             *
 rev:   TAGCCATACTGCCTCGTCCGAATACCCTTCCGTTGGTTGGACGTCTAGTCGACTACTACNNNNNNNNNNANNNNNNNNNNACAGCGGCGTTCAGGTAGAC
 ```
+
+Library id naming in ArrayExpress E-MTAB-7152:
+
+- Lib138: hmU_randomized_snAP
+- Lib139: hmU_randomized_enrichedcomp
+- Lib140: hmU_randomized_input
 
 ```python
 import gzip
@@ -268,7 +270,6 @@ ofile.write("\t" + "\t".join(["A", "C", "G", "T"]) + "\n")
 
 for i in range(1, 11):
   ofile.write("%s\t" % str(i) + "\t".join([str(index_base[(i, b)]) for b in ["A", "C", "G", "T"]]) + "\n")
-
 
 ofile.close()  
 

@@ -42,34 +42,34 @@
 
 
 
-
 ## Libraries
 
-APE1 k.d. batch:
+ArrayExpress E-MTAB-7152 naming:
 
-Library | Biological replicate
-:------:|:-------------------:
-snAP-seq | rep1
-snAP-seq | rep2
-snAP-seq | rep3
-snAP-seq | rep4
-Y-input | rep1
-Y-input | rep2
-Y-input | rep3
-Y-input | rep4
+Library | Biological replicate | Sequencing type| script id
+:------:|:--------------------:|:--------------:|:--------:
+APE1-siRNA_snAP1 | rep1 | paired-end | Lib134
+APE1-siRNA_snAP2 | rep2 | paired-end | Lib135
+APE1-siRNA_snAP3 | rep3 | paired-end | Lib145
+APE1-siRNA_snAP4 | rep4 | paired-end | Lib146
+APE1-siRNA_input1 | rep1 | paired-end | Lib136
+APE1-siRNA_input2 | rep2 | paired-end | Lib137
+APE1-siRNA_input3 | rep3 | paired-end | Lib147
+APE1-siRNA_input4 | rep4 | paired-end | Lib148
+Cont-siRNA_snAP1 | rep1 | paired-end | Lib141
+Cont-siRNA_snAP2 | rep2 | paired-end | Lib142
+Cont-siRNA_snAP3 | rep3 | paired-end | Lib149
+Cont-siRNA_snAP4 | rep4 | paired-end | Lib150
+Cont-siRNA_input1 | rep1 | paired-end | Lib143
+Cont-siRNA_input2 | rep2 | paired-end | Lib144
+Cont-siRNA_input3 | rep3 | paired-end | Lib151
+Cont-siRNA_input4 | rep4 | paired-end | Lib152
 
-WT batch:
 
-Library | Biological replicate
-:------:|:-------------------:
-snAP-seq | rep1
-snAP-seq | rep2
-snAP-seq | rep3
-snAP-seq | rep4
-Y-input | rep1
-Y-input | rep2
-Y-input | rep3
-Y-input | rep4
+
+## Renaming
+
+`*_1.fastq.gz` -> `*_R1.fastq.gz` and `*_2.fastq.gz` -> `*_R2.fastq.gz`
 
 
 
@@ -94,7 +94,7 @@ mkdir ../fastq_trimmed
 
 for fq1 in *R1*.fastq.gz
 do
-  fq2=${fq1/_R1_/_R2_}
+  fq2=${fq1/_R1/_R2}
   bname=${fq1%.fastq.gz}
   cutadapt -a AGATCGGAAGAGC -A AGATCGGAAGAGC -m 15 -q 20 -o ../fastq_trimmed/$fq1 -p ../fastq_trimmed/$fq2 $fq1 $fq2 > ../fastq_trimmed/${bname}.txt
 done

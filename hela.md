@@ -128,7 +128,7 @@ cd ~/reference/
 wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg38/Homo_sapiens_UCSC_hg38.tar.gz
 tar -xvf Homo_sapiens_UCSC_hg38.tar.gz
 
-cat genome.fa spikeins.fa > genome_spikeins.fa
+cat genome.fa spikeins.fa > genome_spikeins.fa # see oligo.md for the contents of spikeins.fa
 bwa index genome_spikeins.fa
 samtools faidx genome_spikeins.fa
 ```

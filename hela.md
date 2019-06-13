@@ -660,277 +660,56 @@ cd ~/macs2/default
 # APE1-siRNA #
 ##############
 
-# Lib134 and Lib135
-bedtools intersect \
--a Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 56780, 100*56780/148097 = 38%
-
-bedtools intersect \
--a Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 56908, 100*56908/156856 = 36%
-
-
-# Lib145 and Lib146
-bedtools intersect \
--a Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 34241, 100*34241/91364 = 37%
-
-bedtools intersect \
--a Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 35282, 100*35282/87183 = 40%
-
-
-# Lib134 and Lib145
-bedtools intersect \
--a Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 24709, 100*24709/148097 = 17%
-
-bedtools intersect \
--a Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 23001, 100*23001/91364 = 25%
-
-
-# Lib134 and Lib146
-bedtools intersect \
--a Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 35468, 100*35468/148097 = 24%
-
-bedtools intersect \
--a Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 32872, 100*32872/87183 = 38%
-
-
-# Lib135 and Lib145
-bedtools intersect \
--a Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 25512, 100*25512/156856 = 16%
-
-bedtools intersect \
--a 180503_NS500222_0398_HTCJ3BGX5_Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b 180427_NS500222_0395_HTCGYBGX5_Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 23427, 100*23427/91364 = 26%
-
-
-# Lib135 and Lib146
-bedtools intersect \
--a Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 36259, 100*36259/156856 = 23%
-
-bedtools intersect \
--a Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 33317, 100*33317/87183 = 38%
-
-
-# multiinter
-bedtools multiinter -i \
-Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--names Lib134 Lib135 Lib145 Lib146 | \
-cut -f5 | sort | uniq -c | sort -k1,1nr
-# 135975 Lib135
-# 127583 Lib134
-#  89546 Lib145
-#  71165 Lib146
-#  47875 Lib134,Lib135
-#  37087 Lib145,Lib146
-#  21113 Lib135,Lib146
-#  20717 Lib134,Lib135,Lib146
-#  20665 Lib134,Lib146
-#  16428 Lib134,Lib135,Lib145,Lib146
-#  14626 Lib135,Lib145,Lib146
-#  13933 Lib134,Lib145,Lib146
-#  10663 Lib135,Lib145
-#  10106 Lib134,Lib145
-#   8278 Lib134,Lib135,Lib145
-
-
-# merge
 tableCat.py -i \
-Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak | \
+180326_NS500222_0389_HMV3JBGX5_Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak \
+180427_NS500222_0395_HTCGYBGX5_Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak \
+180503_NS500222_0398_HTCJ3BGX5_Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak \
+180504_NS500222_0399_HTGKFBGX5_Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak | \
 awk -v OFS="\t" '{print $1, $2, $3, $NF}' | \
 sort -k1,1 -k2,2n | \
 bedtools merge -c 4,4 -o distinct,count_distinct -i - | \
-awk -v OFS="\t" '$5 > 2 {print $1, $2, $3}' > Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed
+awk -v OFS="\t" '$5 > 2 {print $1, $2, $3}' > Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed
 
-wc -l Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed # 27516
-
+wc -l Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed # 25080
 
 
 ##############
 # Cont-siRNA #
 ##############
 
-# Lib141 and Lib142
-bedtools intersect \
--a Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 37664, 100*37664/59705 = 63%
-
-bedtools intersect \
--a Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 36459, 100*36459/93948 = 39%
-
-
-# Lib149 and Lib150
-bedtools intersect \
--a Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 7370, 100*7370/18639 = 40%
-
-bedtools intersect \
--a Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 7676, 100*7676/92196 = 8%
-
-
-# Lib141 and Lib149
-bedtools intersect \
--a Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 9508, 100*9508/59705 = 16%
-
-bedtools intersect \
--a Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 9486, 100*9486/18639 = 51%
-
-
-# Lib141 and Lib150
-bedtools intersect \
--a Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 17559, 100*17559/59705 = 29%
-
-bedtools intersect \
--a Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 17508, 100*17508/92196 = 19%
-
-
-# Lib142 and Lib149
-bedtools intersect \
--a Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 11735, 100*11735/93948 = 12%
-
-bedtools intersect \
--a Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 11678, 100*11678/18639 = 63%
-
-
-# Lib142 and Lib150
-bedtools intersect \
--a Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 22707, 100*22707/93948 = 24%
-
-bedtools intersect \
--a Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--b Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--sorted \
--wa -u | wc -l # 22434, 100*22434/92196 = 24%
-
-
-# multiinter
-bedtools multiinter -i \
-Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
--names Lib141 Lib142 Lib149 Lib150 | \
-cut -f5 | sort | uniq -c | sort -k1,1nr
-#  91801 Lib142
-#  87714 Lib150
-#  47181 Lib141
-#  39526 Lib141,Lib142
-#  19523 Lib142,Lib150
-#  12831 Lib141,Lib142,Lib150
-#  12386 Lib149
-#  11474 Lib141,Lib150
-#   7414 Lib142,Lib149
-#   7239 Lib141,Lib142,Lib149
-#   4244 Lib141,Lib142,Lib149,Lib150
-#   4186 Lib141,Lib149
-#   3929 Lib149,Lib150
-#   2937 Lib142,Lib149,Lib150
-#   1697 Lib141,Lib149,Lib150
-
-
-# merge
 tableCat.py -i \
-Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak \
-Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak | \
+180501_NS500222_0396_HTGMFBGX5_Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak \
+180502_NS500222_0397_HTGM5BGX5_Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak \
+180508_NS500222_0401_HMVKKBGX5_Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak \
+180509_NS500222_0402_HMJJHBGX5_Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5.subtracted_peaks.narrowPeak | \
 awk -v OFS="\t" '{print $1, $2, $3, $NF}' | \
 sort -k1,1 -k2,2n | \
 bedtools merge -c 4,4 -o distinct,count_distinct -i - | \
-awk -v OFS="\t" '$5 > 2 {print $1, $2, $3}' > Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed
+awk -v OFS="\t" '$5 > 2 {print $1, $2, $3}' > Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed
 
-wc -l Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed # 16835
+wc -l Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed # 14110
 ```
 
-Intersections of `Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed` and `Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed`:
+Intersections and union of `Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed` and `Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed`:
 
 ```bash
 cd ~/macs2_hg38/default
 
-wc -l Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed
-#  27516 Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed
-#  16835 Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed
+wc -l Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed
+# 25080 Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed
+# 14110 Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed
 
 bedtools intersect \
--a Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed \
--b Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed \
+-a Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed \
+-b Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed \
 -sorted \
--wa -u | wc -l # 12492 Lib134_Lib135_Lib145_Lib146_merge_p1e-5 regions intersect
+-wa -u | wc -l # 10261 Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted regions intersect
 
 bedtools intersect \
--a Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed \
--b Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed \
+-a Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed \
+-b Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed \
 -sorted \
--wa -u | wc -l # 12606 (100*12606/16835 = 75%) Lib141_Lib142_Lib149_Lib150_merge_p1e-5 regions intersect
+-wa -u | wc -l # 10387 (100*10387/14110 = 74%) Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted regions intersect
 ```
 
 
@@ -1043,7 +822,7 @@ bedtools sort -i - > hg38_promoter_utr5_exon_intron_utr3_intergenic_pqs.bed
 
 ### define mappable genome
 
-Need to define two mappable files: APE1 k.d. and WT:
+Need to define two mappable files: APE1-siRNA and Cont-siRNA:
 
 - Lib136_HeLa_siRNA3_Z_Y1_S4.hg38.clean.bam
 - Lib137_HeLa_siRNA3_Z_Y2_S2.hg38.clean.bam
@@ -1084,7 +863,7 @@ annotations=~/annotation/hg38_promoter_utr5_exon_intron_utr3_intergenic_pqs.bed
 # APE1-siRNA
 mappable=~/bam/APE1.Y.mappable.bed
 
-bed=Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed
+bed=Lib134_Lib135_Lib145_Lib146_merge_p1e-5_subtracted.bed
 bname=`basename ${bed%.bed}`
 gat-run.py -a $annotations -s <(grep -v -E '_|chrEBV' $bed) -w $mappable --ignore-segment-tracks -n 10000 -t 20 -L ../../gat/$bname.log > ../../gat/$bname.txt
 
@@ -1092,7 +871,7 @@ gat-run.py -a $annotations -s <(grep -v -E '_|chrEBV' $bed) -w $mappable --ignor
 # Cont-siRNA
 mappable=~/bam/WT.Y.mappable.bed
 
-bed=Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed
+bed=Lib141_Lib142_Lib149_Lib150_merge_p1e-5_subtracted.bed
 bname=`basename ${bed%.bed}`
 gat-run.py -a $annotations -s <(grep -v -E '_|chrEBV' $bed) -w $mappable --ignore-segment-tracks -n 10000 -t 20 -L ../../gat/$bname.log > ../../gat/$bname.txt
 ```
@@ -1162,12 +941,10 @@ names = ["Lib134_HeLa_siRNA3_Z_AP1_S5",
 "Lib142_HeLa_cp_Z_AP2_S1",
 "Lib149_HeLa_cp_Z_AP3_S1",
 "Lib150_HeLa_cp_Z_AP4_S1",
-"Lib169_HeLa_cp_Z_AP5_S3",
 "Lib143_HeLa_cp_Z_Y1_S2",
 "Lib144_HeLa_cp_Z_Y2_S2",
 "Lib151_HeLa_cp_Z_Y3_S2",
-"Lib152_HeLa_cp_Z_Y4_S2",
-"Lib171_HeLa_cp_Z_Y5_S2"]
+"Lib152_HeLa_cp_Z_Y4_S2"]
 
 d = {}
 

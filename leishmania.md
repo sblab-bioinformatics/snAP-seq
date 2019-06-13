@@ -76,6 +76,12 @@ Lmajor_UNG_input2 | rep2 | paired-end | Lib133
 
 
 
+## Renaming
+
+`*_1.fastq.gz` -> `*_R1.fastq.gz` and `*_2.fastq.gz` -> `*_R2.fastq.gz`
+
+
+
 ## Quality check
 
 ```bash
@@ -97,7 +103,7 @@ mkdir ../fastq_trimmed
 
 for fq1 in *R1*.fastq.gz
 do
-  fq2=${fq1/_R1_/_R2_}
+  fq2=${fq1/_R1/_R2}
   bname=${fq1%.fastq.gz}
   cutadapt -a AGATCGGAAGAGC -A AGATCGGAAGAGC -m 15 -q 20 -o ../fastq_trimmed/$fq1 -p ../fastq_trimmed/$fq2 $fq1 $fq2 > ../fastq_trimmed/${bname}.txt
 done

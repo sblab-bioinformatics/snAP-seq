@@ -65,6 +65,8 @@ Cont-siRNA_input2 | rep2 | paired-end | Lib144
 Cont-siRNA_input3 | rep3 | paired-end | Lib151
 Cont-siRNA_input4 | rep4 | paired-end | Lib152
 
+Bear the mapping above in mind for the code following from now:
+
 
 
 ## Renaming
@@ -110,8 +112,8 @@ mkdir ../fastq_trimmed_protecting_sequence_optimal
 
 for fq1 in *R1*.fastq.gz
 do
-  fq2=${fq1/_R1_/_R2_}
-  bname=${fq1%_R1_001.fastq.gz}
+  fq2=${fq1/_R1/_R2}
+  bname=${fq1%_R1.fastq.gz}
   cutadapt -g GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT -G GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT -e 0.1 -O 20 --discard-trimmed --pair-filter=any -o ../fastq_trimmed_protecting_sequence_optimal/$fq1 -p ../fastq_trimmed_protecting_sequence_optimal/$fq2 $fq1 $fq2 > ../fastq_trimmed_protecting_sequence_optimal/$bname.txt
 done
 ```
@@ -145,7 +147,7 @@ ref=../reference/genome_spikeins.fa
 
 for fq1 in *R1*.fastq.gz
 do
-  bname=${fq1%_R1_001.fastq.gz}
+  bname=${fq1%_R1.fastq.gz}
   fq2=${fq1/_R1_/_R2_}
   bwa mem -t 20 -M $ref $fq1 $fq2 | \
   samtools view -@ 20 -b - | \
@@ -161,7 +163,7 @@ cd ~/bam
 
 mkdir ../flagstat
 
-listOfIds="..." # add here the list of ids for the libraries you want to merge
+listOfIds="..." # add here the list of ids for the lanes that you would like to merge. If there is no need, then omit the samtools merge step in the loop below
 
 for id in listOfIds
 do
@@ -236,7 +238,7 @@ do
       nohup samtools view $bam -F260 -f64 -f16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ../fragmentation_analysis/${bam%.bam}_R1_rev_${ref}.txt &
       nohup samtools view $bam -F260 -f128 -f32 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ../fragmentation_analysis/${bam%.bam}_R2_fwd_${ref}.txt &
       nohup samtools view $bam -F260 -f128 -f16 | awk -v ref=$ref '$3==ref {print $4}' | sort -k1,1n | uniq -c | awk '{ t = $1; $1 = $2; $2 = t; print; }' > ../fragmentation_analysis/${bam%.bam}_R2_rev_${ref}.txt &
-    done
+  done
 done
 ```
 
@@ -344,9 +346,9 @@ cd ~/bam
 
 mkdir -p ../macs2/default
 
-#############
-# APE1 k.d. #
-#############
+##############
+# APE1-siRNA #
+##############
 
 # Lib134_HeLa_siRNA3_Z_AP1 vs. Lib136_HeLa_siRNA3_Z_Y1
 bam_t=Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.bam
@@ -365,6 +367,24 @@ macs2 callpeak \
 --nomodel \
 -p 0.00001 \
 --cutoff-analysis
+
+bname=`basename ${bam_c%.bam}`
+
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib136_HeLa_siRNA3_Z_Y1_S4.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib134_HeLa_siRNA3_Z_AP1_S5.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
+
 
 
 # Lib135_HeLa_siRNA3_Z_AP2 vs. Lib137_HeLa_siRNA3_Z_Y2
@@ -385,6 +405,24 @@ macs2 callpeak \
 -p 0.00001 \
 --cutoff-analysis
 
+bname=`basename ${bam_c%.bam}`
+
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib137_HeLa_siRNA3_Z_Y2_S2.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib135_HeLa_siRNA3_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
+
+
 
 # Lib145_HeLa_siRNA3_Z_AP3 vs. Lib147_HeLa_siRNA_Z_Y3
 bam_t=Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.bam
@@ -403,6 +441,24 @@ macs2 callpeak \
 --nomodel \
 -p 0.00001 \
 --cutoff-analysis
+
+bname=`basename ${bam_c%.bam}`
+
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib147_HeLa_siRNA_Z_Y3_S2.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib145_HeLa_siRNA3_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
+
 
 
 # Lib146_HeLa_siRNA_Z_AP4 vs. Lib148_HeLa_siRNA_Z_Y4
@@ -423,10 +479,28 @@ macs2 callpeak \
 -p 0.00001 \
 --cutoff-analysis
 
+bname=`basename ${bam_c%.bam}`
 
-######
-# WT #
-######
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib148_HeLa_siRNA_Z_Y4_S2.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib146_HeLa_siRNA_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
+
+
+
+##############
+# Cont-siRNA #
+##############
 
 # Lib141_HeLa_cp_Z_AP1 vs. Lib143_HeLa_cp_Z_Y1
 bam_t=Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.bam
@@ -445,6 +519,24 @@ macs2 callpeak \
 --nomodel \
 -p 0.00001 \
 --cutoff-analysis
+
+bname=`basename ${bam_c%.bam}`
+
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib143_HeLa_cp_Z_Y1_S2.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib141_HeLa_cp_Z_AP1_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
+
 
 
 # Lib142_HeLa_cp_Z_AP2 vs. Lib144_HeLa_cp_Z_Y2
@@ -465,6 +557,24 @@ macs2 callpeak \
 -p 0.00001 \
 --cutoff-analysis
 
+bname=`basename ${bam_c%.bam}`
+
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib144_HeLa_cp_Z_Y2_S2.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib142_HeLa_cp_Z_AP2_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
+
+
 
 # Lib149_HeLa_cp_Z_AP3 vs. Lib151_HeLa_cp_Z_Y3
 bam_t=Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.bam
@@ -484,6 +594,24 @@ macs2 callpeak \
 -p 0.00001 \
 --cutoff-analysis
 
+bname=`basename ${bam_c%.bam}`
+
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib151_HeLa_cp_Z_Y3_S2.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib149_HeLa_cp_Z_AP3_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
+
+
 
 # Lib150_HeLa_cp_Z_AP4 vs. Lib152_HeLa_cp_Z_Y4
 bam_t=Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.bam
@@ -502,6 +630,23 @@ macs2 callpeak \
 --nomodel \
 -p 0.00001 \
 --cutoff-analysis
+
+bname=`basename ${bam_c%.bam}`
+
+macs2 callpeak \
+-t $bam_c \
+-f BAMPE \
+--keep-dup all \
+--outdir ../macs2_hg38/default/ \
+-n $bname.nomodel \
+--tempdir ~/tmp/ \
+--nomodel \
+--cutoff-analysis"
+
+bed_a=../macs2_hg38/default/Lib152_HeLa_cp_Z_Y4_S2.hg38.clean.nomodel_peaks.narrowPeak
+bed_t=../macs2_hg38/default/Lib150_HeLa_cp_Z_AP4_S1.hg38.clean.nomodel.p1e-5_peaks.narrowPeak
+bname=${bed_t%_peaks.narrowPeak}
+bedtools intersect -a $bed_t -b $bed_a -v > ${bname}.subtracted_peaks.narrowPeak
 ```
 
 
@@ -511,9 +656,9 @@ macs2 callpeak \
 ```bash
 cd ~/macs2/default
 
-#############
-# APE1 k.d. #
-#############
+##############
+# APE1-siRNA #
+##############
 
 # Lib134 and Lib135
 bedtools intersect \
@@ -639,9 +784,9 @@ wc -l Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed # 27516
 
 
 
-######
-# WT #
-######
+##############
+# Cont-siRNA #
+##############
 
 # Lib141 and Lib142
 bedtools intersect \
@@ -915,12 +1060,12 @@ cd ~/bam
 
 g=~/reference/genome.fa.fai
 
-# APE1 k.d.
+# APE1-siRNA
 samtools merge -@ 20 APE1.Y.tmp.bam *siRNA*Y*.clean.bam
 bedtools genomecov -ibam APE1.Y.tmp.bam -bg -g $g | grep -v -E '_|chrEBV' | sort -k1,1 -k2,2n | mergeBed > APE1.Y.mappable.bed
 rm APE1.Y.tmp.bam
 
-# WT
+# Cont-siRNA
 samtools merge -@ 20 WT.Y.tmp.bam *cp*Y*.clean.bam &
 bedtools genomecov -ibam WT.Y.tmp.bam -bg -g $g | grep -v -E '_|chrEBV' | sort -k1,1 -k2,2n | mergeBed > WT.Y.mappable.bed
 rm WT.Y.tmp.bam
@@ -936,7 +1081,7 @@ mkdir ~/gat
 
 annotations=~/annotation/hg38_promoter_utr5_exon_intron_utr3_intergenic_pqs.bed
 
-# APE1 k.d.
+# APE1-siRNA
 mappable=~/bam/APE1.Y.mappable.bed
 
 bed=Lib134_Lib135_Lib145_Lib146_merge_p1e-5.bed
@@ -944,7 +1089,7 @@ bname=`basename ${bed%.bed}`
 gat-run.py -a $annotations -s <(grep -v -E '_|chrEBV' $bed) -w $mappable --ignore-segment-tracks -n 10000 -t 20 -L ../../gat/$bname.log > ../../gat/$bname.txt
 
 
-# WT
+# Cont-siRNA
 mappable=~/bam/WT.Y.mappable.bed
 
 bed=Lib141_Lib142_Lib149_Lib150_merge_p1e-5.bed
@@ -1081,7 +1226,7 @@ ofile.close()
 
 ## Calling AP sites
 
-### R1.fwd APE1 k.d.
+### R1.fwd APE1-siRNA
 
 #### Coverage of alignment start sites
 
@@ -1238,7 +1383,7 @@ ggsave('~/figures/APE1.R1.fwd.cigar.all.png', width = 12, height = 12, units = '
 ```
 
 
-### R1.fwd WT
+### R1.fwd Cont-siRNA
 
 #### Coverage of alignment start sites
 

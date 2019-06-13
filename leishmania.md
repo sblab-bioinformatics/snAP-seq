@@ -119,7 +119,7 @@ mkdir ../fastq_trimmed_protecting_sequence_optimal
 
 for fq1 in *R1*.fastq.gz
 do
-  fq2=${fq1/_R1_/_R2_}
+  fq2=${fq1/_R1/_R2}
   bname=${fq1%_R1_001.fastq.gz}
   cutadapt -g GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT -G GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT -e 0.1 -O 20 --discard-trimmed --pair-filter=any -o ../fastq_trimmed_protecting_sequence_optimal/$fq1 -p ../fastq_trimmed_protecting_sequence_optimal/$fq2 $fq1 $fq2 > ../fastq_trimmed_protecting_sequence_optimal/$bname.txt
 done
@@ -157,7 +157,7 @@ ref=../reference/Lmajor.genome_spikeins.fasta
 for fq1 in *R1*.fastq.gz
 do
   bname=${fq1%_R1_001.fastq.gz}
-  fq2=${fq1/_R1_/_R2_}
+  fq2=${fq1/_R1/_R2}
   bwa mem -t 20 -M $ref $fq1 $fq2 | \
   samtools view -@ 20 -b - | \
   samtools sort -@ 20 -T ~/tmp/$bname -o ../bam/$bname.tmp.bam -

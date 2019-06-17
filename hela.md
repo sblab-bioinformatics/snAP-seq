@@ -790,32 +790,15 @@ wc -l hg38_intergenic.bed # 35958
 ```
 
 
-### PQS
 
-```bash
-cd ~/annotation/
-
-ref=~/reference/genome.fa
-
-nohup fastaRegexFinder.py -f $ref -q | \
-bedtools sort -i | \
-cut -f1-3 | \
-grep -v -E "_|chrEBV" | \
-sed 's/$/&\tPQS/' > hg38_pqs.bed &
-
-wc -l hg38_pqs.bed # 362816
-```
-
-
-### combine gene features, intergenic and PQS
+### combine gene features and intergenic regions
 
 ```bash
 cd ~/annotation
 
 cat <(cut -f1-3,6 hg38_promoter_gene.bed hg38_utr5_transcript.bed hg38_exon_transcript.bed hg38_intron_transcript.bed hg38_utr3_transcript.bed) \
-hg38_intergenic.bed \
-hg38_pqs.bed | \
-bedtools sort -i - > hg38_promoter_utr5_exon_intron_utr3_intergenic_pqs.bed
+hg38_intergenic.bed | \
+bedtools sort -i - > hg38_promoter_utr5_exon_intron_utr3_intergenic.bed
 ```
 
 
@@ -857,7 +840,7 @@ cd ~/macs2_hg38/default
 
 mkdir ~/gat
 
-annotations=~/annotation/hg38_promoter_utr5_exon_intron_utr3_intergenic_pqs.bed
+annotations=~/annotation/hg38_promoter_utr5_exon_intron_utr3_intergenic.bed
 
 # APE1-siRNA
 mappable=~/bam/APE1.Y.mappable.bed

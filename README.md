@@ -1,5 +1,5 @@
 
-This repository contains data access and computational analyses for the methods developed in our [snAP-seq manuscript](https://www.nature.com/articles/s41557-019-0279-9).
+This repository contains data access and computational analyses for the methods developed in our [snAP-seq manuscript](https://www.nature.com/articles/s41557-019-0279-9)
 
 ## Data
 

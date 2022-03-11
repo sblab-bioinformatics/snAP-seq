@@ -261,7 +261,7 @@ cd ~/bam
 
 whitelist=~/reference/hg38.whitelist.bed
 
-for bam in `*.bam | grep -v "tmp"`
+for bam in `ls *.bam | grep -v "tmp"`
 do
   bname=${bam%.bam}
   samtools idxstats $bam | cut -f1 | grep 'chr' | xargs samtools view -@ 20 -F 3844 -q 10 -L $whitelist -b $bam > $bname.clean.bam && samtools index $bname.clean.bam && \
